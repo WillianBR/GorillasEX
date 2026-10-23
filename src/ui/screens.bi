@@ -120,3 +120,27 @@ SUB DrawNameEditor
     TextWorld 80, 290, "A-Z 0-9 espaco, hifen e underline; ate 24 caracteres", _RGB32(185, 207, 230)
     TextWorld 80, 350, "ENTER: gravar | ESC: cancelar", _RGB32(185, 207, 230)
 END SUB
+
+' Painel modal multiplataforma com confirmacao explicita de encerramento.
+SUB DrawExitDialog
+    DIM lv_Left AS DOUBLE, lv_Right AS DOUBLE
+    DIM lv_ButtonY AS DOUBLE, lv_YesColor AS _UNSIGNED LONG
+    DIM lv_NoColor AS _UNSIGNED LONG
+    lv_Left = WorldWidth / 2 - 245
+    lv_Right = WorldWidth / 2 + 245
+    lv_ButtonY = 360
+    ' Uma borda destacada evidencia que a tela de fundo esta temporariamente bloqueada.
+    BoxWorld lv_Left - 4, 235, lv_Right + 4, 434, _RGB32(235, 183, 65)
+    BoxWorld lv_Left, 239, lv_Right, 430, _RGB32(23, 37, 62)
+    TextWorld lv_Left + 34, 260, "GORILLASEX - SAIR DO JOGO?", _RGB32(255, 218, 95)
+    TextWorld lv_Left + 34, 302, "Deseja realmente encerrar a partida?", _RGB32(226, 235, 247)
+    lv_YesColor = _RGB32(67, 85, 109)
+    lv_NoColor = _RGB32(67, 85, 109)
+    IF ExitDialogSelection = 1 THEN lv_YesColor = _RGB32(137, 85, 49)
+    IF ExitDialogSelection = 2 THEN lv_NoColor = _RGB32(50, 123, 96)
+    BoxWorld WorldWidth / 2 - 154, lv_ButtonY, WorldWidth / 2 - 14, lv_ButtonY + 45, lv_YesColor
+    BoxWorld WorldWidth / 2 + 14, lv_ButtonY, WorldWidth / 2 + 154, lv_ButtonY + 45, lv_NoColor
+    TextWorld WorldWidth / 2 - 106, lv_ButtonY + 12, "SIM", _RGB32(255, 255, 255)
+    TextWorld WorldWidth / 2 + 72, lv_ButtonY + 12, "NAO", _RGB32(255, 255, 255)
+    TextWorld lv_Left + 35, 413, "Setas/TAB: escolher | ENTER: confirmar | ESC: cancelar", _RGB32(192, 207, 225)
+END SUB

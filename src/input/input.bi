@@ -14,6 +14,11 @@ END SUB
 SUB HandleInput (KeyText AS STRING)
     DIM Code AS LONG
     DIM ValidChars AS STRING
+    ' Modal: nenhuma tecla ou clique atravessa para o jogo enquanto aberto.
+    IF ExitDialogVisible <> 0 THEN
+        HandleExitDialog KeyText
+        EXIT SUB
+    END IF
     ' F1 abre o help em qualquer tela e preserva a pagina anterior.
     IF KeyText = CHR$(0) + CHR$(59) THEN
         IF CurrentPage = 3 THEN
@@ -126,7 +131,7 @@ SUB ExecuteMenu
                 ResizeDisplay 1280, 720
             END IF
         CASE 8
-            QuitRequested = -1
+            RequestExit
     END SELECT
 END SUB
 
@@ -135,5 +140,47 @@ SUB ToggleFullscreen
         _FULLSCREEN _SQUAREPIXELS
     ELSE
         _FULLSCREEN _OFF
+    END IF
+END SUB
+
+' Abre um unico dialogo para o menu Sair e o botao X da janela.
+SUB RequestExit
+    IF ExitDialogVisible <> 0 THEN EXIT SUB
+    ExitDialogVisible = -1
+    ' A opcao padrao e NAO, evitando saidas acidentais.
+    ExitDialogSelection = 2
+END SUB
+
+' Processa exclusivamente os eventos da confirmacao modal.
+SUB HandleExitDialog (p_KeyText AS STRING)
+    DIM lv_Selected AS LONG
+    ' Seleciona SIM ou NAO pelas setas e pelo TAB.
+    IF p_KeyText = CHR$(0) + CHR$(75) OR p_KeyText = CHR$(0) + CHR$(77) OR p_KeyText = CHR$(9) THEN
+        ExitDialogSelection = 3 - ExitDialogSelection
+    END IF
+    ' ESC sempre cancela, mesmo se SIM estiver selecionado.
+    IF p_KeyText = CHR$(27) THEN
+        ExitDialogVisible = 0
+        EXIT SUB
+    END IF
+    ' Posicoes dos botoes usam coordenadas logicas da tela.
+    IF MouseClicked <> 0 THEN
+        IF MouseY >= 360 AND MouseY <= 405 THEN
+            IF MouseX >= WorldWidth / 2 - 154 AND MouseX <= WorldWidth / 2 - 14 THEN
+                ExitDialogSelection = 1
+                lv_Selected = -1
+            ELSEIF MouseX >= WorldWidth / 2 + 14 AND MouseX <= WorldWidth / 2 + 154 THEN
+                ExitDialogSelection = 2
+                lv_Selected = -1
+            END IF
+        END IF
+    END IF
+    IF p_KeyText = CHR$(13) THEN lv_Selected = -1
+    IF lv_Selected <> 0 THEN
+        IF ExitDialogSelection = 1 THEN
+            ' O encerramento normal percorre SaveRanking e libera as imagens.
+            QuitRequested = -1
+        END IF
+        ExitDialogVisible = 0
     END IF
 END SUB

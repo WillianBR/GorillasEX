@@ -10,7 +10,13 @@ FOR %%I IN ("%~dp0..") DO SET "PARENT=%%~fI"
 SET "ZIP=%PARENT%\%PROJECT%-source.zip"
 SET "TEMPZIP=%PARENT%\%PROJECT%-source.tmp.zip"
 
-WHERE tar.exe >NUL 2>&1
+IF NOT EXIST "%SystemRoot%\System32\tar.exe" (
+    ECHO ERROR: Windows BSD tar not found.
+    EXIT /B 1
+)
+
+REM Deliberately bypass PATH: use the Windows bundled BSD tar.
+IF NOT EXIST "%SystemRoot%\System32\tar.exe" >NUL 2>&1
 IF ERRORLEVEL 1 (
     ECHO ERROR: tar.exe was not found on PATH.
     EXIT /B 1
@@ -22,9 +28,9 @@ ECHO Project: %PROJECT%
 ECHO Output : %ZIP%
 ECHO.
 
-REM Windows 11 provides BSD tar; -a selects ZIP from the .zip extension.
+REM Use Windows BSD tar by absolute path; do not depend on PATH.
 REM Exclusions apply recursively to directories named .git or bin.
-tar.exe -a -c -f "%TEMPZIP%" --exclude=".git" --exclude="bin" -C "%PARENT%" "%PROJECT%"
+"%SystemRoot%\System32\tar.exe" --format=zip -c -f "%TEMPZIP%" --exclude=".git" --exclude="bin" -C "%PARENT%" "%PROJECT%"
 IF ERRORLEVEL 1 (
     ECHO ERROR: ZIP creation failed.
     IF EXIST "%TEMPZIP%" DEL /Q "%TEMPZIP%"
@@ -32,7 +38,7 @@ IF ERRORLEVEL 1 (
 )
 
 REM Check that the resulting archive can be listed.
-tar.exe -t -f "%TEMPZIP%" >NUL
+"%SystemRoot%\System32\tar.exe" -t -f "%TEMPZIP%" >NUL
 IF ERRORLEVEL 1 (
     ECHO ERROR: ZIP verification failed.
     DEL /Q "%TEMPZIP%"

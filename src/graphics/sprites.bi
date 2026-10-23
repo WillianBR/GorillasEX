@@ -38,10 +38,49 @@ SUB DrawGorilla (Index AS LONG)
 END SUB
 
 SUB DrawBanana
-    DIM X AS DOUBLE, Y AS DOUBLE
+    DIM lv_CenterX AS DOUBLE, lv_CenterY AS DOUBLE
+    DIM lv_Spin AS DOUBLE, lv_CosAngle AS DOUBLE, lv_SinAngle AS DOUBLE
+    DIM lv_Progress AS DOUBLE, lv_LocalX AS DOUBLE, lv_LocalY AS DOUBLE
+    DIM lv_WorldX AS DOUBLE, lv_WorldY AS DOUBLE, lv_Radius AS DOUBLE
+    DIM lv_OuterColor AS _UNSIGNED LONG, lv_InnerColor AS _UNSIGNED LONG
+    DIM lv_Index AS LONG, lv_Pass AS LONG
     IF Projectile.Active = 0 THEN EXIT SUB
-    X = Projectile.X
-    Y = Projectile.Y
-    CircleWorld X, Y, 5, _RGB32(255, 217, 45)
-    LINE (Px(X - 5), Py(Y - 3))-(Px(X + 4), Py(Y + 2)), _RGB32(255, 236, 108)
+    lv_CenterX = Projectile.X
+    lv_CenterY = Projectile.Y
+    ' Rotacao continua: a banana permanece distinguivel em qualquer orientacao.
+    lv_Spin = GameTime * 9
+    lv_CosAngle = COS(lv_Spin)
+    lv_SinAngle = SIN(lv_Spin)
+    ' Construcao de uma meia-lua, nao um circulo com uma faixa diagonal.
+    ' Primeiro desenha um contorno escuro; depois uma casca amarela mais fina.
+    FOR lv_Pass = 1 TO 2
+        FOR lv_Index = 0 TO 28
+            lv_Progress = lv_Index / 28
+            lv_LocalX = (lv_Progress - .5) * 25
+            lv_LocalY = 5 - SIN(lv_Progress * Pi) * 11
+            lv_WorldX = lv_CenterX + lv_LocalX * lv_CosAngle - lv_LocalY * lv_SinAngle
+            lv_WorldY = lv_CenterY + lv_LocalX * lv_SinAngle + lv_LocalY * lv_CosAngle
+            lv_Radius = 1.1 + SIN(lv_Progress * Pi) * 2.9
+            IF lv_Pass = 1 THEN
+                lv_Radius = lv_Radius + .8
+                lv_OuterColor = _RGB32(99, 61, 23)
+            ELSE
+                lv_OuterColor = _RGB32(250, 205, 42)
+                IF lv_Progress > .18 AND lv_Progress < .78 THEN lv_OuterColor = _RGB32(255, 224, 64)
+            END IF
+            ' Circulo preenchido por PAINT sobre o contorno recem desenhado.
+            CircleWorld lv_WorldX, lv_WorldY, lv_Radius, lv_OuterColor
+            PAINT (Px(lv_WorldX), Py(lv_WorldY)), lv_OuterColor, lv_OuterColor
+        NEXT lv_Index
+    NEXT lv_Pass
+    ' Extremidades castanhas tornam o desenho reconhecivel em HD e QHD.
+    FOR lv_Index = 0 TO 1
+        lv_Progress = lv_Index
+        lv_LocalX = (lv_Progress - .5) * 25
+        lv_LocalY = 5
+        lv_WorldX = lv_CenterX + lv_LocalX * lv_CosAngle - lv_LocalY * lv_SinAngle
+        lv_WorldY = lv_CenterY + lv_LocalX * lv_SinAngle + lv_LocalY * lv_CosAngle
+        CircleWorld lv_WorldX, lv_WorldY, 1.8, _RGB32(77, 47, 24)
+        PAINT (Px(lv_WorldX), Py(lv_WorldY)), _RGB32(77, 47, 24), _RGB32(77, 47, 24)
+    NEXT lv_Index
 END SUB

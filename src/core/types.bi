@@ -69,3 +69,7 @@ DIM SHARED AudioPhase AS DOUBLE, AudioSampleRate AS DOUBLE
 DIM SHARED PrevMouseDown AS INTEGER, MouseClicked AS INTEGER
 DIM SHARED MouseX AS DOUBLE, MouseY AS DOUBLE
 DIM SHARED CitySeed AS LONG
+' Dialogo de confirmacao: gerenciado pelo loop principal, sem chamadas Win32.
+DIM SHARED ExitDialogVisible AS INTEGER
+DIM SHARED ExitDialogSelection AS LONG
+

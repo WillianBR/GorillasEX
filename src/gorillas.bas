@@ -82,6 +82,9 @@ DO WHILE QuitRequested = 0
     PreviousTime = NowTime
     GameTime = GameTime + DeltaTime
     PollMouse
+    ' O primeiro _EXIT arma a interceptacao; consultar a cada frame e obrigatorio.
+    lv_ExitSignal = _EXIT
+    IF lv_ExitSignal <> 0 THEN RequestExit
     KeyText = INKEY$
     HandleInput KeyText
     IF CurrentPage = 1 AND MatchFinished = 0 THEN
@@ -100,6 +103,8 @@ DO WHILE QuitRequested = 0
     IF CurrentPage = 2 THEN DrawRanking
     IF CurrentPage = 3 THEN DrawHelp
     IF CurrentPage = 4 THEN DrawNameEditor
+    ' Dialogo sobreposto por ultimo, para ficar visivel sobre todas as paginas.
+    IF ExitDialogVisible <> 0 THEN DrawExitDialog
     DrawAudio
     _DISPLAY
 LOOP

@@ -65,6 +65,20 @@
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": []
+        },
+        {
+            "label": "GorillasEX: Package Binary ZIP",
+            "type": "process",
+            "command": "${workspaceFolder}\\bin\\Package-GorillasEX-bin.bat",
+            "options": {
+                "cwd": "${workspaceFolder}\\bin"
+            },
+            "dependsOn": [
+                "GorillasEX: Build"
+            ],
+            "dependsOrder": "sequence",
+            "group": "none",
+            "problemMatcher": []
         }
     ]
 }
