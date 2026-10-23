@@ -1,5 +1,8 @@
 @ECHO OFF
 SETLOCAL EnableExtensions DisableDelayedExpansion
+REM
+REM objcopy --dump-section .credits=CON GorillasEX.exe 2>NUL
+REM 
 
 REM GorillasEX - Gera SHA-256 e pacote ZIP dos binarios.
 REM Instale este arquivo em GorillasEX\bin\.
