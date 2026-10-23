@@ -76,6 +76,9 @@ SUB HandleInput (KeyText AS STRING)
     IF AimAngle > 85 THEN AimAngle = 85
     IF AimPower < 10 THEN AimPower = 10
     IF AimPower > 100 THEN AimPower = 100
+    ' Atualiza apenas a mira do jogador humano ativo.
+    PlayerAimAngle(CurrentPlayer) = AimAngle
+    PlayerAimPower(CurrentPlayer) = AimPower
     IF KeyText = " " OR MouseClicked <> 0 THEN FireBanana
 END SUB
 

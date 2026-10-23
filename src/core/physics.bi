@@ -45,10 +45,10 @@ SUB UpdatePhysics (TimeStep AS DOUBLE)
         NEXT Segment
         IF Projectile.Y < -WorldHeight THEN Projectile.Active = 0
         IF Projectile.Active = 0 AND Hit = 0 THEN
-            CurrentPlayer = 3 - CurrentPlayer
+            SetCurrentPlayer 3 - CurrentPlayer
         END IF
         IF Projectile.Active = 0 AND Hit <> 0 THEN
-            CurrentPlayer = 3 - CurrentPlayer
+            SetCurrentPlayer 3 - CurrentPlayer
         END IF
     END IF
     ' O gorila cai se a explosao destruir a base sob seus pes.
@@ -85,6 +85,8 @@ SUB UpdatePhysics (TimeStep AS DOUBLE)
         ' IA simples v1; os disparos usam a mesma rotina dos humanos.
         AimAngle = 30 + INT(RND * 47)
         AimPower = 42 + INT(RND * 49)
+        PlayerAimAngle(2) = AimAngle
+        PlayerAimPower(2) = AimPower
         FireBanana
     END IF
 END SUB

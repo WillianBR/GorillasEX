@@ -20,8 +20,13 @@ SUB InitRound
     RoundFinished = 0
     RoundWinner = 0
     CurrentPlayer = 1
-    AimAngle = 45
-    AimPower = 65
+    ' Inicializa a mira individual apenas no inicio de cada rodada.
+    PlayerAimAngle(1) = 45
+    PlayerAimAngle(2) = 45
+    PlayerAimPower(1) = 65
+    PlayerAimPower(2) = 65
+    AimAngle = PlayerAimAngle(CurrentPlayer)
+    AimPower = PlayerAimPower(CurrentPlayer)
     Wind = (RND - .5) * 130
     StatusText = "Use setas para angulo/forca; ESPACO dispara"
     StatusUntil = GameTime + 4
@@ -73,12 +78,23 @@ SUB RegisterRoundWinner (Winner AS LONG)
     END IF
 END SUB
 
+' Troca o jogador mantendo os ajustes exclusivos de cada um.
+SUB SetCurrentPlayer (p_PlayerNumber AS LONG)
+    IF p_PlayerNumber < 1 OR p_PlayerNumber > 2 THEN EXIT SUB
+    CurrentPlayer = p_PlayerNumber
+    AimAngle = PlayerAimAngle(CurrentPlayer)
+    AimPower = PlayerAimPower(CurrentPlayer)
+END SUB
+
 SUB FireBanana
     DIM AngleRadians AS DOUBLE, Direction AS DOUBLE
     IF Projectile.Active <> 0 OR RoundFinished <> 0 THEN EXIT SUB
     IF Gorillas(CurrentPlayer).Falling <> 0 THEN EXIT SUB
     Direction = 1
     IF CurrentPlayer = 2 THEN Direction = -1
+    ' O disparo pertence ao jogador ativo, sem sobrescrever o outro.
+    PlayerAimAngle(CurrentPlayer) = AimAngle
+    PlayerAimPower(CurrentPlayer) = AimPower
     AngleRadians = AimAngle * Pi / 180
     Projectile.X = Gorillas(CurrentPlayer).X + Direction * 20
     Projectile.Y = Gorillas(CurrentPlayer).Y + 8

@@ -2,6 +2,7 @@
 ' Nunca utiliza SOUND, PLAY, BEEP nem espera ocupada.
 SUB StartSound (EffectNumber AS LONG)
     IF SoundEnabled = 0 THEN EXIT SUB
+    IF AudioSampleRate <= 0 THEN EXIT SUB
     SoundKind = EffectNumber
     SoundPosition = 0
     SELECT CASE EffectNumber
@@ -18,6 +19,11 @@ SUB DrawAudio
     DIM Frequency AS DOUBLE, PhaseStep AS DOUBLE, Noise AS DOUBLE
     IF SoundEnabled = 0 THEN EXIT SUB
     IF SoundKind = 0 THEN EXIT SUB
+    ' Guarda preventiva: jamais calcula divisao com amostragem/duracao zero.
+    IF AudioSampleRate <= 0 OR SoundSamples <= 0 THEN
+        SoundKind = 0
+        EXIT SUB
+    END IF
     ' Limita a quantidade de PCM pendente, evitando latencia crescente.
     IF _SNDRAWLEN > .12 THEN EXIT SUB
     FOR Index = 1 TO 2048
@@ -38,7 +44,9 @@ SUB DrawAudio
                 Noise = RND * 2 - 1
                 SampleValue = (Noise * .31 + SIN(AudioPhase) * .18) * Level
             CASE 4
-                Frequency = 330 * (2 ^ (INT((1 - Level) * 8) MOD 5 / 12))
+                ' Calcula primeiro o resto inteiro.
+                ' Depois divide o resultado por 12.
+                Frequency = 330 * (2 ^ ((INT((1 - Level) * 8) MOD 5) / 12))
                 SampleValue = SIN(AudioPhase) * Level * .24
         END SELECT
         PhaseStep = 2 * Pi * Frequency / AudioSampleRate

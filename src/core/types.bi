@@ -49,6 +49,9 @@ DIM SHARED CurrentPage AS LONG, SelectedMenu AS LONG, CurrentPlayer AS LONG
 DIM SHARED RankingPage AS LONG, EditingPlayer AS LONG, NameBuffer AS STRING
 DIM SHARED RoundNumber AS LONG, RoundLimit AS LONG
 DIM SHARED Gravity AS DOUBLE, Wind AS DOUBLE, AimAngle AS DOUBLE, AimPower AS DOUBLE
+' Preserva independentemente o ultimo ajuste de cada jogador.
+DIM SHARED PlayerAimAngle(1 TO 2) AS DOUBLE
+DIM SHARED PlayerAimPower(1 TO 2) AS DOUBLE
 DIM SHARED MatchFinished AS INTEGER, RoundFinished AS INTEGER, RoundWinner AS LONG
 DIM SHARED DemoMode AS INTEGER, ClassicMode AS INTEGER, SoundEnabled AS INTEGER
 DIM SHARED ShowDebug AS INTEGER, QuitRequested AS INTEGER

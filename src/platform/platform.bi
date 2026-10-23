@@ -1,7 +1,7 @@
 ' Configuracoes de tela e diretório persistente multiplataforma.
 SUB InitDisplay
     SCREEN _NEWIMAGE(ScreenWidth, ScreenHeight, 32)
-    _TITLE "GorillasEX - HD 32-bit"
+    _TITLE "GorillasEX - HD 32-bit - Powered by QB64-PE & @WillianBR"
     _FONT 16
 END SUB
 

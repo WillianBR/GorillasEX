@@ -2,7 +2,13 @@
 ' Copyright (c) 2026. Implementacao independente inspirada em Gorillas.
 ' Codigo multiplataforma, RGBA 32-bit, sem recursos exclusivos de MS-DOS.
 ' Cada subsistema vive em seu proprio arquivo .bi.
+
+' Habilita informacoes de origem para erros em tempo de execucao.
+$ERRORLOCATION:ON
+
+' Exige declaracao explicita das variaveis.
 OPTION _EXPLICIT
+ 
 ' Tipos de retorno das FUNCTION sem sufixos de QuickBASIC.
 ' QB64-PE nao aceita "FUNCTION Nome(...) AS Tipo".
 ' As diretivas DEF... aplicam-se somente a identificadores sem AS explicito.
@@ -11,6 +17,11 @@ DEFINT I
 DEFLNG B, E, F, J, P
 DEFDBL R
 DEFSTR S
+
+' GorillasEX - Identidade visual da aplicacao.
+' Incorpora o icone ao executavel Windows.
+$EXEICON:'./assets/icons/GorillasEX.ico'
+
 '$INCLUDE:'core/types.bi'
 
 ' Inicializacao do processo e de todos os sistemas.
