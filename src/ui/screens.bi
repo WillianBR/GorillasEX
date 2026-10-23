@@ -27,21 +27,57 @@ SUB DrawMenu
     TextWorld 185, 575, "Resolucao: " + LTRIM$(STR$(ScreenWidth)) + " x " + LTRIM$(STR$(ScreenHeight)), _RGB32(149, 190, 214)
 END SUB
 
+ ' Game HUD: active-player pointer and editable controls use distinct visual treatments.
 SUB DrawGame
-    DIM I AS LONG, Caption AS STRING
+    DIM lv_PlayerIndex AS LONG
+    DIM lv_Caption AS STRING
+    DIM lv_HudCenter AS DOUBLE
+    DIM lv_AngleText AS STRING
+    DIM lv_PowerText AS STRING
+    DIM lv_InputBackground AS _UNSIGNED LONG
+    DIM lv_InputForeground AS _UNSIGNED LONG
+
+    ' Paint the immutable city and the actors before drawing the HUD overlay.
     _PUTIMAGE , SceneImage
-    FOR I = 1 TO 2
-        DrawGorilla I
-    NEXT I
+    FOR lv_PlayerIndex = 1 TO 2
+        DrawGorilla lv_PlayerIndex
+    NEXT lv_PlayerIndex
     DrawBanana
-    BoxWorld 0, 0, WorldWidth, 69, _RGB32(18, 26, 48)
+
+    ' The expanded HUD leaves enough room for an easily visible turn arrow.
+    BoxWorld 0, 0, WorldWidth, 114, _RGB32(18, 26, 48)
     TextWorld 15, 9, Gorillas(1).Name + ":" + LTRIM$(STR$(Gorillas(1).Wins)), _RGB32(253, 221, 84)
     TextWorld WorldWidth - 235, 9, Gorillas(2).Name + ":" + LTRIM$(STR$(Gorillas(2).Wins)), _RGB32(253, 221, 84)
-    Caption = "Round " + LTRIM$(STR$(RoundNumber)) + "/" + LTRIM$(STR$(RoundLimit))
-    TextWorld WorldWidth / 2 - 70, 8, Caption, _RGB32(235, 240, 255)
-    Caption = "Wind " + LTRIM$(STR$(INT(Wind))) + " | Angle " + LTRIM$(STR$(INT(AimAngle)))
-    Caption = Caption + " | Power " + LTRIM$(STR$(INT(AimPower)))
-    TextWorld WorldWidth / 2 - 175, 35, Caption, _RGB32(180, 211, 237)
+
+    ' The pointer follows the current turn, including AI-controlled turns.
+    ' During a projectile flight and during the victory animation it stays
+    ' with the last player who threw; no premature turn switches.
+    IF RoundFinished = 0 AND CurrentPlayer >= 1 AND CurrentPlayer <= 2 THEN
+        DrawTurnIndicator CurrentPlayer
+    END IF
+
+    ' Present the wind and round centrally, away from player names.
+    lv_HudCenter = WorldWidth / 2
+    lv_Caption = "Round " + LTRIM$(STR$(RoundNumber)) + "/" + LTRIM$(STR$(RoundLimit))
+    TextWorld lv_HudCenter - 66, 8, lv_Caption, _RGB32(235, 240, 255)
+    TextWorld lv_HudCenter - 66, 32, "Wind: " + LTRIM$(STR$(INT(Wind))), _RGB32(180, 211, 237)
+
+    ' Input-style boxes are deliberately different from the dark HUD.
+    ' The AI's values are shown for context but are not presented as editable.
+    lv_InputBackground = _RGB32(236, 220, 146)
+    lv_InputForeground = _RGB32(30, 36, 52)
+    IF Projectile.Active <> 0 OR RoundFinished <> 0 OR (DemoMode <> 0 AND CurrentPlayer = 2) THEN
+        lv_InputBackground = _RGB32(113, 128, 146)
+        lv_InputForeground = _RGB32(245, 245, 245)
+    END IF
+    BoxWorld lv_HudCenter - 144, 70, lv_HudCenter - 10, 102, lv_InputBackground
+    BoxWorld lv_HudCenter + 10, 70, lv_HudCenter + 144, 102, lv_InputBackground
+    lv_AngleText = "ANGLE: " + LTRIM$(STR$(INT(AimAngle)))
+    lv_PowerText = "POWER: " + LTRIM$(STR$(INT(AimPower)))
+    TextWorld lv_HudCenter - 135, 79, lv_AngleText, lv_InputForeground
+    TextWorld lv_HudCenter + 19, 79, lv_PowerText, lv_InputForeground
+
+    ' Bottom status remains separate from the editable controls.
     BoxWorld 0, 634, WorldWidth, 675, _RGB32(18, 26, 48)
     IF RoundFinished <> 0 OR GameTime < StatusUntil THEN
         TextWorld 18, 647, StatusText, _RGB32(250, 221, 107)
@@ -49,8 +85,43 @@ SUB DrawGame
         TextWorld 18, 647, "Vez: " + Gorillas(CurrentPlayer).Name + "  |  ESC: menu", _RGB32(237, 241, 247)
     END IF
     IF ShowDebug <> 0 THEN
-        TextWorld 16, 80, "Seed " + LTRIM$(STR$(CitySeed)) + " | Native " + LTRIM$(STR$(ScreenWidth)) + "x" + LTRIM$(STR$(ScreenHeight)), _RGB32(255, 255, 255)
+        TextWorld 16, 122, "Seed " + LTRIM$(STR$(CitySeed)) + " | Native " + LTRIM$(STR$(ScreenWidth)) + "x" + LTRIM$(STR$(ScreenHeight)), _RGB32(255, 255, 255)
     END IF
+END SUB
+
+' A golden arrow points upward from directly beneath the active player's name.
+' All dimensions are expressed in world units and scale with the viewport.
+SUB DrawTurnIndicator (p_PlayerIndex AS LONG)
+    DIM lv_CenterX AS DOUBLE
+    DIM lv_TipY AS DOUBLE
+    DIM lv_BaseY AS DOUBLE
+    DIM lv_BobOffset AS DOUBLE
+    DIM lv_Outline AS _UNSIGNED LONG
+    DIM lv_Gold AS _UNSIGNED LONG
+
+    IF p_PlayerIndex < 1 OR p_PlayerIndex > 2 THEN EXIT SUB
+    IF p_PlayerIndex = 1 THEN
+        lv_CenterX = 66
+    ELSE
+        lv_CenterX = WorldWidth - 181
+    END IF
+
+    ' Keep the arrow within the HUD; animate without any blocking delay.
+    lv_BobOffset = SIN(GameTime * 4) * 4
+    lv_TipY = 33 + lv_BobOffset
+    lv_BaseY = 100 + lv_BobOffset
+    lv_Outline = _RGB32(68, 45, 20)
+    lv_Gold = _RGB32(255, 210, 46)
+
+    ' Wide upward-pointing head with a narrow shaft and dark border.
+    LINE (Px(lv_CenterX - 17), Py(lv_TipY + 24))-(Px(lv_CenterX), Py(lv_TipY)), lv_Outline
+    LINE (Px(lv_CenterX), Py(lv_TipY))-(Px(lv_CenterX + 17), Py(lv_TipY + 24)), lv_Outline
+    LINE (Px(lv_CenterX - 17), Py(lv_TipY + 24))-(Px(lv_CenterX - 7), Py(lv_TipY + 24)), lv_Outline
+    LINE (Px(lv_CenterX + 7), Py(lv_TipY + 24))-(Px(lv_CenterX + 17), Py(lv_TipY + 24)), lv_Outline
+    LINE (Px(lv_CenterX - 7), Py(lv_TipY + 24))-(Px(lv_CenterX - 7), Py(lv_BaseY)), lv_Outline
+    LINE (Px(lv_CenterX + 7), Py(lv_TipY + 24))-(Px(lv_CenterX + 7), Py(lv_BaseY)), lv_Outline
+    LINE (Px(lv_CenterX - 7), Py(lv_BaseY))-(Px(lv_CenterX + 7), Py(lv_BaseY)), lv_Outline
+    PAINT (Px(lv_CenterX), Py(lv_TipY + 15)), lv_Gold, lv_Outline
 END SUB
 
 SUB DrawRanking
