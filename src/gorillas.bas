@@ -11,17 +11,10 @@ DEFINT I
 DEFLNG B, E, F, J, P
 DEFDBL R
 DEFSTR S
-
-' GorillasEX - Diagnostico de erros em tempo de execucao.
-$ERRORLOCATION:ON
-
-' Exige declaracao explicita das variaveis.
-OPTION _EXPLICIT
-
 '$INCLUDE:'core/types.bi'
 
 ' Inicializacao do processo e de todos os sistemas.
-Randomize Timer
+RANDOMIZE TIMER
 ScreenWidth = 1280
 ScreenHeight = 720
 WorldWidth = INT(WorldHeight * ScreenWidth / ScreenHeight)
@@ -31,7 +24,7 @@ SoundEnabled = -1
 AudioSampleRate = 44100
 CurrentPage = 0
 SelectedMenu = 1
-CitySeed = CLNG(Timer * 1000) AND &H7FFFFFFF
+CitySeed = CLNG(TIMER * 1000) AND &H7FFFFFFF
 InitDisplay
 InitStorage
 LoadRanking
@@ -41,10 +34,10 @@ InitPlayers
 ' O loop nunca bloqueia esperando animacoes ou sons terminarem.
 DIM PreviousTime AS DOUBLE, NowTime AS DOUBLE, DeltaTime AS DOUBLE
 DIM Accumulator AS DOUBLE, KeyText AS STRING, LoopCount AS LONG
-PreviousTime = Timer(.001)
+PreviousTime = TIMER(.001)
 DO WHILE QuitRequested = 0
     _LIMIT 60
-    NowTime = Timer(.001)
+    NowTime = TIMER(.001)
     DeltaTime = NowTime - PreviousTime
     IF DeltaTime < 0 THEN DeltaTime = DeltaTime + 86400
     IF DeltaTime > .15 THEN DeltaTime = .15
