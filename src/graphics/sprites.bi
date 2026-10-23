@@ -1,14 +1,27 @@
 ' Desenhos procedurais RGBA: nenhum PNG ou sprite externo e exigido.
 SUB DrawGorilla (Index AS LONG)
     DIM X AS DOUBLE, Y AS DOUBLE, Fur AS _UNSIGNED LONG
+    DIM lv_VictoryElapsed AS DOUBLE, lv_DanceFrame AS LONG
+    DIM lv_ArmLeftTop AS DOUBLE, lv_ArmRightTop AS DOUBLE
+    lv_VictoryElapsed = GameTime - VictoryStartedAt
+    lv_DanceFrame = 0
+    IF RoundFinished <> 0 AND RoundWinner = Index AND lv_VictoryElapsed >= 0 AND lv_VictoryElapsed < 5 THEN
+        lv_DanceFrame = INT(lv_VictoryElapsed * 5) MOD 4
+    END IF
     X = Gorillas(Index).X
     Y = Gorillas(Index).Y
     IF Gorillas(Index).Alive = 0 THEN EXIT SUB
     Fur = _RGB32(118, 79, 58)
+    IF lv_DanceFrame = 1 OR lv_DanceFrame = 3 THEN X = X + 3 - 2 * lv_DanceFrame
+    IF lv_DanceFrame = 1 OR lv_DanceFrame = 2 THEN Y = Y - 7
     ' Bracos maiores e postura distinta ao vencer a rodada.
     IF RoundFinished <> 0 AND RoundWinner = Index THEN
-        BoxWorld X - 17, Y - 4, X - 10, Y + 13, Fur
-        BoxWorld X + 10, Y - 4, X + 17, Y + 13, Fur
+        lv_ArmLeftTop = Y - 9
+        lv_ArmRightTop = Y - 9
+        IF lv_DanceFrame = 1 THEN lv_ArmLeftTop = Y + 4
+        IF lv_DanceFrame = 3 THEN lv_ArmRightTop = Y + 4
+        BoxWorld X - 19, lv_ArmLeftTop, X - 11, Y + 14, Fur
+        BoxWorld X + 11, lv_ArmRightTop, X + 19, Y + 14, Fur
     ELSE
         BoxWorld X - 17, Y + 12, X - 10, Y + 29, Fur
         BoxWorld X + 10, Y + 12, X + 17, Y + 29, Fur

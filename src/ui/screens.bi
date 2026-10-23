@@ -75,19 +75,41 @@ SUB DrawRanking
     TextWorld 70, 642, "ENTER / clique / ESC: voltar", _RGB32(175, 200, 230)
 END SUB
 
+' Painel de ajuda F1, desenhado em coordenadas do mundo.
+' A arte PNG e opcional: ausencia do arquivo nao impede o jogo.
+SUB LoadHelpArtwork
+    HelpImage = 0
+    IF _FILEEXISTS("assets/icons/GorillasEX.png") THEN
+        HelpImage = _LOADIMAGE("assets/icons/GorillasEX.png", 32)
+    ELSEIF _FILEEXISTS("src/assets/icons/GorillasEX.png") THEN
+        HelpImage = _LOADIMAGE("src/assets/icons/GorillasEX.png", 32)
+    END IF
+END SUB
+
 SUB DrawHelp
-    CLS , _RGB32(20, 32, 55)
-    TextWorld 70, 58, "GORILLASEX - CONTROLES", _RGB32(255, 217, 85)
-    TextWorld 70, 130, "Seta PARA CIMA / BAIXO: mudar angulo", _RGB32(220, 236, 246)
-    TextWorld 70, 172, "Seta ESQUERDA / DIREITA: mudar potencia", _RGB32(220, 236, 246)
-    TextWorld 70, 214, "ESPACO ou clique: arremessar banana", _RGB32(220, 236, 246)
-    TextWorld 70, 256, "ENTER: proxima rodada depois da vitoria", _RGB32(220, 236, 246)
-    TextWorld 70, 298, "ESC: voltar ao menu", _RGB32(220, 236, 246)
-    TextWorld 70, 340, "M: ativar/desativar sons sintetizados", _RGB32(220, 236, 246)
-    TextWorld 70, 382, "F11: alternar tela cheia", _RGB32(220, 236, 246)
-    TextWorld 70, 424, "F3: mostrar dados de diagnostico", _RGB32(220, 236, 246)
-    TextWorld 70, 490, "Destrua o apoio do outro gorila para derruba-lo!", _RGB32(255, 213, 109)
-    TextWorld 70, 570, "Pressione qualquer tecla para voltar", _RGB32(190, 210, 238)
+    DIM lv_PanelRight AS DOUBLE, lv_ArtworkLeft AS DOUBLE
+    DIM lv_RightEdge AS DOUBLE
+    lv_RightEdge = WorldWidth - 28
+    lv_PanelRight = WorldWidth - 54
+    lv_ArtworkLeft = WorldWidth - 280
+    CLS , _RGB32(17, 26, 48)
+    BoxWorld 30, 26, lv_PanelRight, 620, _RGB32(29, 44, 72)
+    TextWorld 58, 48, "GORILLASEX  |  AJUDA (F1)", _RGB32(255, 217, 85)
+    TextWorld 58, 102, "SETA CIMA / BAIXO    Angulo", _RGB32(220, 236, 246)
+    TextWorld 58, 141, "SETA ESQ. / DIREITA  Potencia", _RGB32(220, 236, 246)
+    TextWorld 58, 180, "ESPACO / CLIQUE       Lancar banana", _RGB32(220, 236, 246)
+    TextWorld 58, 219, "ENTER                 Proxima rodada", _RGB32(220, 236, 246)
+    TextWorld 58, 258, "ESC                   Voltar ao menu", _RGB32(220, 236, 246)
+    TextWorld 58, 297, "M                     Som ligado/desligado", _RGB32(220, 236, 246)
+    TextWorld 58, 336, "F11                   Tela cheia", _RGB32(220, 236, 246)
+    TextWorld 58, 375, "F3                    Diagnosticos", _RGB32(220, 236, 246)
+    TextWorld 58, 420, "DICA: destrua o teto sob o rival!", _RGB32(255, 213, 109)
+    TextWorld 58, 466, "F1 / ENTER / clique: retornar", _RGB32(183, 210, 242)
+    IF HelpImage < -1 THEN
+        _PUTIMAGE (Px(lv_ArtworkLeft), Py(120))-(Px(WorldWidth - 76), Py(352)), HelpImage
+    END IF
+    TextWorld 58, 582, "GorillasEX - feito com assistencia de IA", _RGB32(160, 183, 208)
+    TextWorld WorldWidth - 320, 603, "Copyright (c) 2026 WillianBR", _RGB32(192, 199, 216)
 END SUB
 
 ' Editor nao bloqueante de nomes: somente caracteres seguros para JSON.

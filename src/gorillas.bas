@@ -37,6 +37,7 @@ CurrentPage = 0
 SelectedMenu = 1
 CitySeed = CLNG(TIMER * 1000) AND &H7FFFFFFF
 InitDisplay
+LoadHelpArtwork
 InitStorage
 LoadRanking
 CreateCity
@@ -78,6 +79,7 @@ DO WHILE QuitRequested = 0
 LOOP
 SaveRanking
 IF SceneImage < -1 THEN _FREEIMAGE SceneImage
+IF HelpImage < -1 THEN _FREEIMAGE HelpImage
 SYSTEM
 
 ' Bibliotecas logicas: implementacoes apos o programa principal.

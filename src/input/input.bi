@@ -14,6 +14,16 @@ END SUB
 SUB HandleInput (KeyText AS STRING)
     DIM Code AS LONG
     DIM ValidChars AS STRING
+    ' F1 abre o help em qualquer tela e preserva a pagina anterior.
+    IF KeyText = CHR$(0) + CHR$(59) THEN
+        IF CurrentPage = 3 THEN
+            CurrentPage = HelpReturnPage
+        ELSE
+            HelpReturnPage = CurrentPage
+            CurrentPage = 3
+        END IF
+        EXIT SUB
+    END IF
     IF CurrentPage = 4 THEN
         IF KeyText = CHR$(13) THEN
             IF LEN(NameBuffer) > 0 THEN Gorillas(EditingPlayer).Name = NameBuffer
@@ -58,12 +68,12 @@ SUB HandleInput (KeyText AS STRING)
         EXIT SUB
     END IF
     IF CurrentPage = 3 THEN
-        IF KeyText <> "" OR MouseClicked <> 0 THEN CurrentPage = 0
+        IF KeyText <> "" OR MouseClicked <> 0 THEN CurrentPage = HelpReturnPage
         EXIT SUB
     END IF
     IF CurrentPage <> 1 THEN EXIT SUB
     IF RoundFinished <> 0 THEN
-        IF KeyText = CHR$(13) OR MouseClicked <> 0 THEN NextRound
+        IF (KeyText = CHR$(13) OR MouseClicked <> 0) AND GameTime - VictoryStartedAt >= 5 THEN NextRound
         EXIT SUB
     END IF
     IF Projectile.Active <> 0 THEN EXIT SUB
@@ -103,6 +113,7 @@ SUB ExecuteMenu
             RankingPage = 0
             CurrentPage = 2
         CASE 6
+            HelpReturnPage = 0
             CurrentPage = 3
         CASE 7
             IF ScreenWidth = 1280 THEN

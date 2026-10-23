@@ -1,6 +1,6 @@
 ' GorillasEX - Tipos, constantes e estado compartilhado.
 ' Declaracoes explicitas; sem sufixos de tipo do QuickBASIC.
-CONST GameVersion = "1.0.0"
+CONST GameVersion = "1.0.5"
 CONST WorldHeight = 675
 CONST GridSize = 4
 CONST MaxGridX = 850
@@ -56,6 +56,12 @@ DIM SHARED MatchFinished AS INTEGER, RoundFinished AS INTEGER, RoundWinner AS LO
 DIM SHARED DemoMode AS INTEGER, ClassicMode AS INTEGER, SoundEnabled AS INTEGER
 DIM SHARED ShowDebug AS INTEGER, QuitRequested AS INTEGER
 DIM SHARED GameTime AS DOUBLE, FrameCounter AS LONG, FramesPerSecond AS LONG
+' Marca o instante da vitoria para animar, sem bloquear o loop principal.
+DIM SHARED VictoryStartedAt AS DOUBLE
+' Pagina anterior ao help F1: permite retornar a partida sem reiniciar.
+DIM SHARED HelpReturnPage AS LONG
+' Arte opcional para o painel de ajuda.
+DIM SHARED HelpImage AS LONG
 DIM SHARED StatusText AS STRING, StatusUntil AS DOUBLE
 DIM SHARED DataDirectory AS STRING
 DIM SHARED SoundKind AS LONG, SoundPosition AS LONG, SoundSamples AS LONG

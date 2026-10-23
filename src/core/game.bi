@@ -18,6 +18,7 @@ SUB InitRound
     NEXT Index
     Projectile.Active = 0
     RoundFinished = 0
+    VictoryStartedAt = -100
     RoundWinner = 0
     CurrentPlayer = 1
     ' Inicializa a mira individual apenas no inicio de cada rodada.
@@ -61,6 +62,7 @@ SUB RegisterRoundWinner (Winner AS LONG)
     IF RoundFinished <> 0 THEN EXIT SUB
     RoundWinner = Winner
     RoundFinished = -1
+    VictoryStartedAt = GameTime
     Projectile.Active = 0
     IF Winner >= 1 AND Winner <= 2 THEN
         Gorillas(Winner).Wins = Gorillas(Winner).Wins + 1
