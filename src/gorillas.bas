@@ -22,6 +22,23 @@ DEFSTR S
 ' Incorpora o icone ao executavel Windows.
 $EXEICON:'./assets/icons/GorillasEX.ico'
 
+
+' Informacoes de versao do executavel Windows.
+$VERSIONINFO:CompanyName=WillianBR
+$VERSIONINFO:FileDescription=GorillasEX - Banana Wars
+$VERSIONINFO:FileVersion=1.0.5.0
+$VERSIONINFO:InternalName=GorillasEX
+$VERSIONINFO:LegalCopyright=Copyright (c) 2026 WillianBR
+$VERSIONINFO:OriginalFilename=GorillasEX.exe
+$VERSIONINFO:ProductName=GorillasEX
+$VERSIONINFO:ProductVersion=1.0.5
+$VERSIONINFO:Comments=Developed with AI assistance using QB64 Phoenix Edition. Source code: https://github.com/WillianBR/GorillasEX/
+$VERSIONINFO:Web=https://github.com/WillianBR/GorillasEX
+
+' Versoes numericas para o Windows.
+$VERSIONINFO:FILEVERSION#=1,0,5,0
+$VERSIONINFO:PRODUCTVERSION#=1,0,5,0
+
 '$INCLUDE:'core/types.bi'
 
 ' Inicializacao do processo e de todos os sistemas.

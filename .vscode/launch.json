@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+
+    "configurations": [
+        {
+            "name": "GorillasEX: Build and Run",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "cmd /c \"\"${workspaceFolder}\\bin\\GorillasEX.exe\"\"",
+
+            "preLaunchTask": "GorillasEX: Build"
+        }
+    ]
+}

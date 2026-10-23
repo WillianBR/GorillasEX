@@ -1,2 +1,27 @@
+# GorillasEX - Git ignore rules
+
+# Generated executables
 *.exe
+
+# Debug and temporary files
+*.dbg
+*.dmp
+
+# Compiler temporary files
+*.o
+*.obj
+*.a
+
+# Build directories
+/build/
+/dist/
 *.zip
+
+# Runtime data
+*.log
+
+# Local editor settings
+.vs/
+
+# Keep VSCode project configuration
+!.vscode/

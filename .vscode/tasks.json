@@ -1,0 +1,77 @@
+{
+    "version": "2.0.0",
+
+    "tasks": [
+        {
+            "label": "GorillasEX: Build",
+            "type": "shell",
+            "command": "C:\\DESENV\\BasicProgramming\\qb64pe\\qb64pe.exe",
+
+            "args": [
+                "-x",
+                "gorillas.bas",
+                "-o",
+                "${workspaceFolder}\\bin\\GorillasEX.exe"
+            ],
+
+            "options": {
+                "cwd": "${workspaceFolder}\\src"
+            },
+
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "focus": true
+            },
+
+            "problemMatcher": []
+        },
+
+        {
+            "label": "GorillasEX: Run",
+            "type": "shell",
+            "command": "${workspaceFolder}\\bin\\GorillasEX.exe",
+
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+
+            "dependsOn": [
+                "GorillasEX: Build"
+            ],
+
+            "dependsOrder": "sequence",
+
+            "problemMatcher": []
+        },
+
+        {
+            "label": "GorillasEX: Syntax Check",
+            "type": "shell",
+            "command": "C:\\DESENV\\BasicProgramming\\qb64pe\\qb64pe.exe",
+
+            "args": [
+                "-z",
+                "gorillas.bas"
+            ],
+
+            "options": {
+                "cwd": "${workspaceFolder}\\src"
+            },
+
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+
+            "problemMatcher": []
+        }
+    ]
+}
