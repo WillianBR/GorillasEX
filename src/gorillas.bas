@@ -41,6 +41,15 @@ $VERSIONINFO:PRODUCTVERSION#=1,0,5,0
 
 '$INCLUDE:'core/types.bi'
 
+' ============================================================
+' GorillasEX - Window close monitoring
+' ============================================================
+
+DIM lv_ExitSignal AS LONG
+
+' Enables application-controlled window closing.
+lv_ExitSignal = _EXIT
+
 ' Inicializacao do processo e de todos os sistemas.
 RANDOMIZE TIMER
 ScreenWidth = 1280
