@@ -44,8 +44,8 @@ SUB DrawGame
     NEXT lv_PlayerIndex
     DrawBanana
 
-    ' The expanded HUD leaves enough room for an easily visible turn arrow.
-    BoxWorld 0, 0, WorldWidth, 114, _RGB32(18, 26, 48)
+    ' A compact HUD keeps the sun and upper skyline visible.
+    BoxWorld 0, 0, WorldWidth, 58, _RGB32(18, 26, 48)
     TextWorld 15, 9, Gorillas(1).Name + ":" + LTRIM$(STR$(Gorillas(1).Wins)), _RGB32(253, 221, 84)
     TextWorld WorldWidth - 235, 9, Gorillas(2).Name + ":" + LTRIM$(STR$(Gorillas(2).Wins)), _RGB32(253, 221, 84)
 
@@ -60,7 +60,7 @@ SUB DrawGame
     lv_HudCenter = WorldWidth / 2
     lv_Caption = "Round " + LTRIM$(STR$(RoundNumber)) + "/" + LTRIM$(STR$(RoundLimit))
     TextWorld lv_HudCenter - 66, 8, lv_Caption, _RGB32(235, 240, 255)
-    TextWorld lv_HudCenter - 66, 32, "Wind: " + LTRIM$(STR$(INT(Wind))), _RGB32(180, 211, 237)
+    TextWorld lv_HudCenter - 66, 31, "Wind: " + LTRIM$(STR$(INT(Wind))), _RGB32(180, 211, 237)
 
     ' Input-style boxes are deliberately different from the dark HUD.
     ' The AI's values are shown for context but are not presented as editable.
@@ -70,12 +70,12 @@ SUB DrawGame
         lv_InputBackground = _RGB32(113, 128, 146)
         lv_InputForeground = _RGB32(245, 245, 245)
     END IF
-    BoxWorld lv_HudCenter - 144, 70, lv_HudCenter - 10, 102, lv_InputBackground
-    BoxWorld lv_HudCenter + 10, 70, lv_HudCenter + 144, 102, lv_InputBackground
+    BoxWorld lv_HudCenter - 350, 13, lv_HudCenter - 216, 45, lv_InputBackground
+    BoxWorld lv_HudCenter + 216, 13, lv_HudCenter + 350, 45, lv_InputBackground
     lv_AngleText = "ANGLE: " + LTRIM$(STR$(INT(AimAngle)))
     lv_PowerText = "POWER: " + LTRIM$(STR$(INT(AimPower)))
-    TextWorld lv_HudCenter - 135, 79, lv_AngleText, lv_InputForeground
-    TextWorld lv_HudCenter + 19, 79, lv_PowerText, lv_InputForeground
+    TextWorld lv_HudCenter - 341, 22, lv_AngleText, lv_InputForeground
+    TextWorld lv_HudCenter + 225, 22, lv_PowerText, lv_InputForeground
 
     ' Bottom status remains separate from the editable controls.
     BoxWorld 0, 634, WorldWidth, 675, _RGB32(18, 26, 48)
@@ -85,11 +85,11 @@ SUB DrawGame
         TextWorld 18, 647, "Vez: " + Gorillas(CurrentPlayer).Name + "  |  ESC: menu", _RGB32(237, 241, 247)
     END IF
     IF ShowDebug <> 0 THEN
-        TextWorld 16, 122, "Seed " + LTRIM$(STR$(CitySeed)) + " | Native " + LTRIM$(STR$(ScreenWidth)) + "x" + LTRIM$(STR$(ScreenHeight)), _RGB32(255, 255, 255)
+        TextWorld 16, 64, "Seed " + LTRIM$(STR$(CitySeed)) + " | Native " + LTRIM$(STR$(ScreenWidth)) + "x" + LTRIM$(STR$(ScreenHeight)), _RGB32(255, 255, 255)
     END IF
 END SUB
 
-' A golden arrow points upward from directly beneath the active player's name.
+' A compact golden arrow points upward toward the active player's name.
 ' All dimensions are expressed in world units and scale with the viewport.
 SUB DrawTurnIndicator (p_PlayerIndex AS LONG)
     DIM lv_CenterX AS DOUBLE
@@ -106,22 +106,22 @@ SUB DrawTurnIndicator (p_PlayerIndex AS LONG)
         lv_CenterX = WorldWidth - 181
     END IF
 
-    ' Keep the arrow within the HUD; animate without any blocking delay.
-    lv_BobOffset = SIN(GameTime * 4) * 4
-    lv_TipY = 33 + lv_BobOffset
-    lv_BaseY = 100 + lv_BobOffset
+    ' Keep the shorter arrow inside the HUD; retain a subtle bobbing animation.
+    lv_BobOffset = SIN(GameTime * 4) * 2.5
+    lv_TipY = 28 + lv_BobOffset
+    lv_BaseY = 51 + lv_BobOffset
     lv_Outline = _RGB32(68, 45, 20)
     lv_Gold = _RGB32(255, 210, 46)
 
     ' Wide upward-pointing head with a narrow shaft and dark border.
-    LINE (Px(lv_CenterX - 17), Py(lv_TipY + 24))-(Px(lv_CenterX), Py(lv_TipY)), lv_Outline
-    LINE (Px(lv_CenterX), Py(lv_TipY))-(Px(lv_CenterX + 17), Py(lv_TipY + 24)), lv_Outline
-    LINE (Px(lv_CenterX - 17), Py(lv_TipY + 24))-(Px(lv_CenterX - 7), Py(lv_TipY + 24)), lv_Outline
-    LINE (Px(lv_CenterX + 7), Py(lv_TipY + 24))-(Px(lv_CenterX + 17), Py(lv_TipY + 24)), lv_Outline
-    LINE (Px(lv_CenterX - 7), Py(lv_TipY + 24))-(Px(lv_CenterX - 7), Py(lv_BaseY)), lv_Outline
-    LINE (Px(lv_CenterX + 7), Py(lv_TipY + 24))-(Px(lv_CenterX + 7), Py(lv_BaseY)), lv_Outline
-    LINE (Px(lv_CenterX - 7), Py(lv_BaseY))-(Px(lv_CenterX + 7), Py(lv_BaseY)), lv_Outline
-    PAINT (Px(lv_CenterX), Py(lv_TipY + 15)), lv_Gold, lv_Outline
+    LINE (Px(lv_CenterX - 9), Py(lv_TipY + 11))-(Px(lv_CenterX), Py(lv_TipY)), lv_Outline
+    LINE (Px(lv_CenterX), Py(lv_TipY))-(Px(lv_CenterX + 9), Py(lv_TipY + 11)), lv_Outline
+    LINE (Px(lv_CenterX - 9), Py(lv_TipY + 11))-(Px(lv_CenterX - 4), Py(lv_TipY + 11)), lv_Outline
+    LINE (Px(lv_CenterX + 4), Py(lv_TipY + 11))-(Px(lv_CenterX + 9), Py(lv_TipY + 11)), lv_Outline
+    LINE (Px(lv_CenterX - 4), Py(lv_TipY + 11))-(Px(lv_CenterX - 4), Py(lv_BaseY)), lv_Outline
+    LINE (Px(lv_CenterX + 4), Py(lv_TipY + 11))-(Px(lv_CenterX + 4), Py(lv_BaseY)), lv_Outline
+    LINE (Px(lv_CenterX - 4), Py(lv_BaseY))-(Px(lv_CenterX + 4), Py(lv_BaseY)), lv_Outline
+    PAINT (Px(lv_CenterX), Py(lv_TipY + 7)), lv_Gold, lv_Outline
 END SUB
 
 SUB DrawRanking

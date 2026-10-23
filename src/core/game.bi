@@ -1,6 +1,13 @@
 ' Regras da partida: dois humanos, ou um humano contra modo demonstracao.
 SUB InitPlayers
-    Gorillas(1).Name = "PLAYER 1"
+    DIM lv_LoginName AS STRING
+    ' Obtém o login do sistema operacional sem chamadas dependentes de Windows.
+    lv_LoginName = SystemLoginName
+    IF LEN(lv_LoginName) > 0 THEN
+        Gorillas(1).Name = lv_LoginName
+    ELSE
+        Gorillas(1).Name = "PLAYER 1"
+    END IF
     Gorillas(2).Name = "PLAYER 2"
     InitRound
 END SUB
@@ -121,3 +128,29 @@ SUB CountHit (Index AS LONG)
     Rec = FindRecord(Gorillas(Index).Name)
     IF Rec > 0 THEN Records(Rec).Hits = Records(Rec).Hits + 1
 END SUB
+
+' Obtém o nome de login do usuario atual usando variaveis do ambiente.
+' Nao representa autenticacao nem identidade verificada: pode ser editada pelo processo.
+' DEFSTR S no programa principal define o retorno STRING sem sufixos antigos.
+FUNCTION SystemLoginName
+    DIM lv_LoginName AS STRING
+    DIM lv_Result AS STRING
+    DIM lv_Index AS LONG
+    DIM lv_Character AS STRING
+
+    ' Windows: USERNAME. Linux/macOS: USER e LOGNAME.
+    lv_LoginName = _TRIM$(ENVIRON$("USERNAME"))
+    IF LEN(lv_LoginName) = 0 THEN lv_LoginName = _TRIM$(ENVIRON$("USER"))
+    IF LEN(lv_LoginName) = 0 THEN lv_LoginName = _TRIM$(ENVIRON$("LOGNAME"))
+
+    ' Evita que caracteres de controle prejudiquem o desenho do HUD.
+    lv_Result = ""
+    FOR lv_Index = 1 TO LEN(lv_LoginName)
+        lv_Character = MID$(lv_LoginName, lv_Index, 1)
+        IF ASC(lv_Character) >= 32 AND ASC(lv_Character) <> 127 THEN
+            lv_Result = lv_Result + lv_Character
+        END IF
+        IF LEN(lv_Result) >= 24 THEN EXIT FOR
+    NEXT lv_Index
+    SystemLoginName = lv_Result
+END FUNCTION
