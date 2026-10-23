@@ -79,6 +79,20 @@
             "dependsOrder": "sequence",
             "group": "none",
             "problemMatcher": []
+        },
+        {
+            "label": "GorillasEX: Build Linux RHEL8",
+            "type": "process",
+            "command": "${workspaceFolder}\\Build-Linux-RHEL8.bat",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "clear": true
+            },
+            "problemMatcher": []
         }
     ]
 }

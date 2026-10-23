@@ -1,0 +1,30 @@
+============================================================
+                         GorillasEX
+============================================================
+
+GorillasEX - Banana Wars
+Copyright (c) 2026 WillianBR
+
+Project:
+https://github.com/WillianBR/GorillasEX/
+
+Developed with AI assistance using QB64 Phoenix Edition.
+
+Compiler
+--------
+
+QB64 Phoenix Edition 4.6.0
+
+ORIGINAL GAME
+-------------
+
+GORILLAS.BAS
+Copyright (c) 1990 Microsoft Corporation and/or IBM Corp.
+
+GORILLAS Deluxe 2.2
+Copyright (c) 1997-2007 Daniel Beardsmore
+
+Original reference:
+https://github.com/SWO-GS/gorillas
+
+============================================================

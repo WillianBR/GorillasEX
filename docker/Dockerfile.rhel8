@@ -1,0 +1,27 @@
+# GorillasEX: QB64-PE v4.6.0 builder targeting RHEL 8-compatible ABI.
+# This image builds the compiler once; game builds are short-lived containers.
+FROM rockylinux:8
+
+ARG QB64_TAG=v4.6.0
+
+# RHEL 8-compatible compiler and Linux graphics/audio development headers.
+RUN dnf -y install \
+    git gcc gcc-c++ make curl ca-certificates \
+    mesa-libGLU-devel alsa-lib-devel libpng-devel libcurl-devel \
+    libX11-devel libXcursor-devel libXrandr-devel \
+    libXinerama-devel libXi-devel \
+    file binutils findutils \
+ && dnf clean all
+
+# Build QB64-PE directly rather than setup_lnx.sh: the setup script refuses root.
+RUN git clone --depth 1 --branch "${QB64_TAG}" \
+      https://github.com/QB64-Phoenix-Edition/QB64pe.git /opt/qb64pe \
+ && cd /opt/qb64pe \
+ && make OS=lnx BITS=64 BUILD_QB64=y -j2 \
+ && test -x /opt/qb64pe/qb64pe
+
+COPY docker/build-linux.sh /usr/local/bin/build-gorillasex
+RUN chmod +x /usr/local/bin/build-gorillasex
+
+WORKDIR /project
+ENTRYPOINT ["/usr/local/bin/build-gorillasex"]

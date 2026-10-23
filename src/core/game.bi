@@ -29,10 +29,10 @@ SUB InitRound
     RoundWinner = 0
     CurrentPlayer = 1
     ' Inicializa a mira individual apenas no inicio de cada rodada.
-    PlayerAimAngle(1) = 45
-    PlayerAimAngle(2) = 45
-    PlayerAimPower(1) = 65
-    PlayerAimPower(2) = 65
+    PlayerAimAngle(1) = 42
+    PlayerAimAngle(2) = 42
+    PlayerAimPower(1) = 23
+    PlayerAimPower(2) = 23
     AimAngle = PlayerAimAngle(CurrentPlayer)
     AimPower = PlayerAimPower(CurrentPlayer)
     Wind = (RND - .5) * 130
