@@ -2,6 +2,13 @@
 
 Modernizacao independente de um jogo de artilharia com gorilas e bananas, escrita em **QB64 Phoenix Edition** com `OPTION _EXPLICIT`, `SUB`/`FUNCTION` tipadas, comentarios com apostrofo, RGBA de 32 bits e sem dependencias nativas do MS-DOS. Nenhuma thread e criada.
 
+## 🎮 Gameplay Screenshot
+
+![GorillasEX — Banana Wars Gameplay](docs/Screenshot/GorillasEX-Gameplay_03.png)
+
+*Two gorillas, one city, and a whole lot of bananas!*
+
+
 ## Compilar
 
 1. Instale o [QB64 Phoenix Edition](https://github.com/QB64-Phoenix-Edition/QB64pe/releases) (recomenda-se v4.6 ou posterior).
