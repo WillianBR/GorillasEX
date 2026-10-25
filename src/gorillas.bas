@@ -22,6 +22,13 @@ DEFSTR S
 ' Incorpora o icone ao executavel Windows.
 $EXEICON:'./assets/icons/GorillasEX.ico'
 
+' ============================================================
+' GorillasEX - Embedded resources
+' ============================================================
+
+' Embeds the credits file into the executable.
+REM $EMBED:'..\docs\QB_gorillas.bas','QBasic_gorillas.bas'
+'..\docs\QB_gorillas.bas
 
 ' Informacoes de versao do executavel Windows.
 $VERSIONINFO:CompanyName=WillianBR

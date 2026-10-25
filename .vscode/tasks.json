@@ -40,7 +40,7 @@
             "label": "GorillasEX: Build",
             "dependsOn": [
                 "GorillasEX: Compile Windows",
-                "GorillasEX: Post-Build Windows"
+                // "GorillasEX: Post-Build Windows"
             ],
             "dependsOrder": "sequence",
             "group": {

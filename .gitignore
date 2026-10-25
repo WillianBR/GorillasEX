@@ -25,3 +25,9 @@
 
 # Keep VSCode project configuration
 !.vscode/
+
+#
+# Custom rules can be added below this line
+#
+desktop.ini
+bin/
